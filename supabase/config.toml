@@ -1,0 +1,8 @@
+# Configuración mínima para la CLI de Supabase (npx supabase ...).
+# La función verifica la sesión en su propio código (auth.getUser), por eso
+# no se usa la verificación de JWT de la pasarela, que no es compatible con
+# las claves de firma asimétricas de los proyectos nuevos.
+project_id = "trilla-cafe"
+
+[functions.admin-usuarios]
+verify_jwt = false

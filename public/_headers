@@ -1,0 +1,23 @@
+# Cabeceras HTTP para Cloudflare Pages (también las entiende Netlify).
+# La política de contenido solo permite cargar código de esta misma app y
+# hablar con Supabase.
+
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' https://*.supabase.co wss://*.supabase.co; manifest-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+
+# Los archivos de /assets llevan una huella en el nombre: se pueden guardar para siempre.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Estos deben revisarse siempre para que lleguen las actualizaciones.
+/sw.js
+  Cache-Control: no-cache
+/index.html
+  Cache-Control: no-cache
+/manifest.webmanifest
+  Cache-Control: no-cache

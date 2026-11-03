@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f5c3f">
+<title>Trilla de café · Demostración</title>
+<style>
+:root{--bg:#eef1ea;--surf:#fbfcf8;--ink:#1c2a22;--mut:#5f6f64;--acc:#1f5c3f;--onacc:#fff;--line:#d3dacd;--bad:#a8242c;--bad-bg:#f8e4e5;--ok:#1f6b45;--ok-bg:#dcefe3;--warn:#8a5a12;--warn-bg:#f6ead2;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1511;--surf:#18211b;--ink:#e8efe6;--mut:#9db0a2;--acc:#7fcf9f;--onacc:#0f1511;--line:#2b392f;--bad:#f0888e;--bad-bg:#3a1d20;--ok:#7fcf9f;--ok-bg:#173323;--warn:#f0c072;--warn-bg:#3a2c12;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1511;--surf:#18211b;--ink:#e8efe6;--mut:#9db0a2;--acc:#7fcf9f;--onacc:#0f1511;--line:#2b392f;--bad:#f0888e;--bad-bg:#3a1d20;--ok:#7fcf9f;--ok-bg:#173323;--warn:#f0c072;--warn-bg:#3a2c12;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+main{max-width:640px;margin:0 auto;padding:16px}
+main.centro{max-width:440px;padding-top:6vh}
+h1{font:600 22px Georgia,"Iowan Old Style",serif;margin:0 0 2px}
+h2{font:600 18px Georgia,"Iowan Old Style",serif;margin:24px 0 8px}
+a{color:var(--acc)}
+.sub{color:var(--mut);font-size:14px;margin:0 0 16px}
+.sub0{color:var(--mut);font-size:14px;margin:0}
+.big{font:600 44px/1.1 Georgia,"Iowan Old Style",serif;margin:4px 0;font-variant-numeric:tabular-nums}
+.bar{display:flex;height:10px;border-radius:5px;overflow:hidden;background:var(--line);margin:10px 0 6px}
+.bar i{display:block;background:var(--acc)}
+.row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.row small{display:block;color:var(--mut)}
+.bloque{display:grid;gap:6px;padding:10px 0;border-bottom:1px solid var(--line)}
+.split{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.num{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.bad{color:var(--bad)}.ok{color:var(--ok)}
+small.bad{color:var(--bad)}small.ok{color:var(--ok)}
+.tachado>*:first-child{opacity:.55;text-decoration:line-through}
+.form{display:grid;gap:8px;background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:12px}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:8px}.dos>div{display:grid;gap:6px}
+input,select,button{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;min-width:0;width:100%}
+button{background:var(--acc);color:var(--onacc);border-color:var(--acc);font-weight:600;cursor:pointer}
+button.ghost{background:transparent;color:var(--acc)}
+button.link{background:none;border:0;padding:4px 0;width:auto;color:var(--acc);font-weight:500;text-decoration:underline;text-align:left}
+button:disabled{opacity:.5;cursor:not-allowed}
+.inl{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}.inl>input,.inl>select{flex:1 1 150px;width:auto}.inl>button{width:auto;white-space:nowrap}
+label{font-size:14px;color:var(--mut)}
+.check{display:flex;gap:8px;align-items:flex-start;color:var(--ink);font-size:14px}.check input{width:auto;margin:3px 0 0}
+.filtros{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;align-items:end;margin-bottom:8px}
+.filtros label.f{display:grid;gap:2px;font-size:12px}
+.aviso{padding:10px 12px;border-radius:8px;font-size:14px;margin:0 0 12px}
+.aviso.ok{background:var(--ok-bg);color:var(--ok)}.aviso.bad{background:var(--bad-bg);color:var(--bad)}.aviso.warn{background:var(--warn-bg);color:var(--warn)}
+.chip{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--line);color:var(--ink);white-space:nowrap}
+.chip.ok{background:var(--ok-bg);color:var(--ok)}.chip.bad{background:var(--bad-bg);color:var(--bad)}.chip.warn{background:var(--warn-bg);color:var(--warn)}
+.tarjeta{background:var(--surf);border:1px solid var(--line);border-radius:10px;padding:12px}
+.codigo{font:600 24px/1.2 ui-monospace,"SF Mono",Consolas,monospace;letter-spacing:.2em;text-align:center}
+.codigos{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;font-family:ui-monospace,"SF Mono",Consolas,monospace;padding:12px 12px 12px 32px;margin:8px 0;background:var(--surf);border:1px solid var(--line);border-radius:10px}
+.personas{display:grid;gap:8px}
+.persona{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;background:var(--surf);color:var(--ink);border:1px solid var(--line)}
+.persona small{display:block;color:var(--mut);font-weight:400}
+.demo{background:var(--warn-bg);color:var(--warn);font-size:13px;border-bottom:1px solid var(--line)}
+.demo>div{max-width:640px;margin:0 auto;padding:6px 16px;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;justify-content:space-between}
+.demo select{width:auto;padding:4px 8px;font-size:13px;background:var(--surf)}
+header.cab{max-width:640px;margin:0 auto;padding:12px 16px 0;display:flex;justify-content:space-between;align-items:center;gap:12px}
+header.cab b{font:600 16px Georgia,serif}
+header.cab nav{display:flex;gap:14px}
+header.cab button{background:none;border:0;padding:0;width:auto;color:var(--mut);font-weight:500;font-size:14px}
+header.cab button.on{color:var(--acc);font-weight:700}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;background:var(--surf);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
+nav.tabs button{flex:1;max-width:128px;background:none;border:0;border-radius:0;color:var(--mut);padding:10px 2px;font-size:12px;font-weight:500}
+nav.tabs button.on{color:var(--acc);font-weight:700}
+nav.tabs span{display:block;font-size:20px}
+.sc{overflow-x:auto;margin:8px 0}table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}th:first-child,td:first-child,.izq{text-align:left}
+td.concepto{white-space:normal;min-width:180px;text-align:left}
+tfoot th{border-top:2px solid var(--ink)}
+.solo-imprimir{display:none}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+@media print{
+  :root{--bg:#fff;--surf:#fff;--ink:#000;--mut:#444;--line:#bbb;--acc:#000;--ok:#000;--bad:#000;color-scheme:light}
+  body{padding:0;font-size:12px}main{max-width:none;padding:0}
+  .demo,header.cab,nav.tabs,.no-print,button,form{display:none!important}
+  .solo-imprimir{display:block}.sc{overflow:visible}td.concepto{min-width:0}
+}
+</style>
+</head>
+<body>
+<div id="raiz"></div>
+<script>
+/* =====================================================================
+   Trilla de café · versión de demostración en un solo archivo.
+   Reproduce la app construida (fases 1 a 5) con datos de ejemplo que se
+   guardan solo en este navegador. La app real usa Supabase, cuentas con
+   correo y contraseña, y verificación en dos pasos validada en el servidor.
+   ===================================================================== */
+const K = 'trilla-demo-v1', KS = 'trilla-demo-sesion', KE = 'trilla-demo-equipo'
+const CUPO = 15, CODIGO_DEMO = '123456'
+const $ = s => document.querySelector(s)
+const uid = () => Math.random().toString(36).slice(2, 9)
+const p2 = n => String(n).padStart(2, '0')
+const iso = d => `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}`
+const hoy = () => iso(new Date())
+const haceDias = n => iso(new Date(Date.now() - n * 864e5))
+const masDias = (s, n) => iso(new Date(new Date(s + 'T00:00:00').getTime() + n * 864e5))
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]))
+const nf = new Intl.NumberFormat('es', { maximumFractionDigits: 2 })
+const num = n => nf.format(+n || 0)
+const kg = n => num(n) + ' kg'
+const pct = n => n == null || !isFinite(n) ? '—' : num(n) + '%'
+const din = n => { const v = +n || 0; return (v < 0 ? '−' : '') + S.config.moneda + nf.format(Math.abs(v)) }
+const fecha = s => s ? new Date(s.slice(0, 10) + 'T00:00:00').toLocaleDateString('es', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'
+const leer = t => { const l = String(t ?? '').trim().replace(/\s/g, '').replace(',', '.'); return /^\d+(\.\d+)?$/.test(l) ? +l : NaN }
+const sum = (a, fn) => a.reduce((x, y) => x + fn(y), 0)
+const guardar = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch (e) {} }
+const cargar = k => { try { return JSON.parse(localStorage.getItem(k)) } catch (e) { return null } }
+
+const ROL = { admin: 'Administrador', operador: 'Operador', consulta: 'Consulta' }
+const DESC = {
+  admin: 'Todo: registros, pagos, tarifas, reportes y usuarios.',
+  operador: 'Registra recibos, entregas y clientes. No ve precios ni pagos.',
+  consulta: 'Ve precios, cobros, pagos y reportes. No registra nada.',
+}
+const PERM = {
+  registrar: ['admin', 'operador'], dinero: ['admin', 'consulta'], pagos: ['admin'], clientes: ['admin', 'operador'],
+  tarifa: ['admin'], usuarios: ['admin'], reportes: ['admin', 'consulta'], anular: ['admin'],
+}
+const METODOS = { efectivo: 'Efectivo', transferencia: 'Transferencia', cheque: 'Cheque', otro: 'Otro' }
+
+/* ---------- Datos de ejemplo ---------- */
+function codigosNuevos() {
+  const a = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+  return Array.from({ length: 10 }, () => Array.from({ length: 10 }, () => a[Math.floor(Math.random() * a.length)]).join('').replace(/^(.{5})/, '$1-'))
+}
+function semilla() {
+  const r = (id, cli, dias, kgP, tarifa, entrega) => ({
+    id, cliente: cli, fecha: haceDias(dias), kg: kgP, tarifa, anulado: false, motivo: null, creado: Date.now() - dias * 864e5,
+    entregas: entrega ? [{ id: id + 'e', fecha: haceDias(entrega[0]), kg: entrega[1], anulada: false }] : [],
+  })
+  const recibos = [
+    r('r1', 'c1', 52, 2760, 380, [49, 2230]), r('r2', 'c2', 45, 1150, 380, [43, 910]), r('r3', 'c3', 38, 5520, 400, [34, 4460]),
+    r('r4', 'c4', 30, 3200, 400, [27, 2590]), r('r5', 'c5', 21, 4100, 400, [18, 3320]), r('r6', 'c1', 15, 1980, 400, [12, 1600]),
+    r('r7', 'c2', 10, 860, 400, null), r('r8', 'c2', 9, 860, 400, [6, 690]), r('r9', 'c3', 5, 2400, 400, null),
+    r('r10', 'c4', 2, 1500, 400, null), r('r11', 'c1', 1, 1840, 400, null),
+  ]
+  recibos[6].anulado = true; recibos[6].motivo = 'Peso mal digitado'
+  const p = (id, cli, dias, monto, metodo, notas) => ({ id, cliente: cli, fecha: haceDias(dias), monto, metodo, notas: notas || '', anulado: false, motivo: null, creado: Date.now() - dias * 864e5 })
+  const u = (id, nombre, email, rol, extra) => ({ id, nombre, email, rol, activo: true, pendiente: false, equipos: [], codigos: codigosNuevos(), ...extra })
+  return {
+    config: { tarifa: 400, moneda: '$', negocio: 'Trilla de café' },
+    clientes: [
+      { id: 'c1', nombre: 'Finca El Roble', tel: '310 555 0101', notas: '', activo: true },
+      { id: 'c2', nombre: 'Don Mario Pérez', tel: '', notas: 'Paga a fin de mes', activo: true },
+      { id: 'c3', nombre: 'Cooperativa La Loma', tel: '320 555 0199', notas: '', activo: true },
+      { id: 'c4', nombre: 'Hacienda Santa Rita', tel: '311 555 0144', notas: '', activo: true },
+      { id: 'c5', nombre: 'Asociación El Mirador', tel: '', notas: 'Entrega los lunes', activo: true },
+    ],
+    recibos,
+    pagos: [
+      p('p1', 'c1', 48, 1000000, 'transferencia'), p('p2', 'c2', 40, 437000, 'efectivo'), p('p3', 'c3', 30, 1200000, 'transferencia'),
+      p('p4', 'c4', 20, 800000, 'transferencia', 'Abono'), p('p5', 'c5', 15, 1640000, 'transferencia'), p('p6', 'c3', 8, 600000, 'cheque'),
+      p('p7', 'c1', 3, 500000, 'efectivo'),
+    ],
+    usuarios: [
+      u('u1', 'Ana Martínez', 'ana@trilladora.co', 'admin', { equipos: [{ id: 'otro-1', nombre: 'Chrome en Windows (oficina)', creado: haceDias(20), vence: masDias(haceDias(20), 90), revocado: null }] }),
+      u('u2', 'Óscar Ramírez', 'oscar@trilladora.co', 'operador'),
+      u('u3', 'Carla Gómez', 'carla@trilladora.co', 'consulta'),
+      u('u4', 'Luis Pérez', 'luis@trilladora.co', 'operador'),
+      u('u5', 'María Restrepo', 'maria@trilladora.co', 'operador', { pendiente: true }),
+      u('u6', 'Jorge Díaz', 'jorge@trilladora.co', 'consulta', { activo: false }),
+    ],
+    auditoria: [
+      { cuando: Date.now() - 10 * 864e5, quien: 'Ana Martínez', que: 'Anuló un recibo de Don Mario Pérez (860 kg): Peso mal digitado' },
+      { cuando: Date.now() - 35 * 864e5, quien: 'Ana Martínez', que: 'Cambió la tarifa de $380 a $400 por kg' },
+    ],
+    intentos: {},
+  }
+}
+
+let S = cargar(K) || semilla()
+let ses = cargar(KS) || { usuario: null, verificado: false }
+let EQUIPO = cargar(KE)
+if (!EQUIPO) { EQUIPO = 'eq-' + uid(); guardar(KE, EQUIPO) }
+const UI = {
+  vista: 'resumen', id: null, msg: null, abierto: null, editTarifa: false, editCliente: false, codigosVisibles: false, modoRecuperar: false,
+  filtro: { cliente: '', estado: 'todos', desde: '', hasta: '', anulados: false },
+  buscar: '', inactivos: false, periodo: periodoDe('mes'), periodoEC: periodoDe('todo'),
+}
+const persistir = () => { guardar(K, S); guardar(KS, ses) }
+
+/* ---------- Reglas ---------- */
+const yo = () => S.usuarios.find(u => u.id === ses.usuario && u.activo && !u.pendiente) || null
+const puede = p => !!yo() && PERM[p].includes(yo().rol)
+const cliente = id => S.clientes.find(c => c.id === id) || { nombre: '—' }
+const entrega = r => r.entregas.find(e => !e.anulada) || null
+const vigentes = () => S.recibos.filter(r => !r.anulado)
+const cobro = r => r.kg * r.tarifa
+const auditar = que => S.auditoria.unshift({ cuando: Date.now(), quien: yo()?.nombre || 'Sistema', que })
+function cuenta(cid, hasta) {
+  const rs = vigentes().filter(r => r.cliente === cid && (!hasta || r.fecha <= hasta))
+  const ps = S.pagos.filter(p => !p.anulado && p.cliente === cid && (!hasta || p.fecha <= hasta))
+  const cobrado = sum(rs, cobro), pagado = sum(ps, p => p.monto)
+  return { cobrado, pagado, saldo: cobrado - pagado }
+}
+function resumen() {
+  const rs = vigentes(), pend = rs.filter(r => !entrega(r)), entr = rs.filter(r => entrega(r))
+  const trillado = sum(entr, r => r.kg), oro = sum(entr, r => entrega(r).kg)
+  const porCobrar = sum(S.clientes, c => cuenta(c.id).saldo)
+  return { recibido: sum(rs, r => r.kg), pend, enProceso: sum(pend, r => r.kg), trillado, oro, rend: trillado ? oro / trillado * 100 : null, porCobrar }
+}
+const equipoConfiable = u => u.equipos.find(e => e.id === EQUIPO && !e.revocado && e.vence >= hoy()) || null
+function periodoDe(clave) {
+  const d = new Date()
+  if (clave === 'mes') return { clave, desde: iso(new Date(d.getFullYear(), d.getMonth(), 1)), hasta: hoy() }
+  if (clave === 'mesAnterior') return { clave, desde: iso(new Date(d.getFullYear(), d.getMonth() - 1, 1)), hasta: iso(new Date(d.getFullYear(), d.getMonth(), 0)) }
+  if (clave === 'tres') return { clave, desde: haceDias(90), hasta: hoy() }
+  if (clave === 'anio') return { clave, desde: d.getFullYear() + '-01-01', hasta: hoy() }
+  return { clave: 'todo', desde: '', hasta: '' }
+}
+const describir = r => r.desde && r.hasta ? `Del ${fecha(r.desde)} al ${fecha(r.hasta)}` : r.desde ? `Desde el ${fecha(r.desde)}` : r.hasta ? `Hasta el ${fecha(r.hasta)}` : 'Todo el historial'
+const enRango = (f, r) => (!r.desde || f >= r.desde) && (!r.hasta || f <= r.hasta)
+
+/* ---------- Piezas de interfaz ---------- */
+const aviso = () => UI.msg ? `<p class="aviso ${UI.msg.tipo}" role="status">${esc(UI.msg.texto)}</p>` : ''
+const decir = (texto, tipo = 'ok') => { UI.msg = { texto, tipo } }
+const opcionesClientes = (sel, soloActivos) => S.clientes.filter(c => !soloActivos || c.activo).map(c => `<option value="${c.id}" ${c.id === sel ? 'selected' : ''}>${esc(c.nombre)}</option>`).join('')
+function selectorPeriodo(clave) {
+  const r = UI[clave]
+  const ops = [['mes', 'Este mes'], ['mesAnterior', 'Mes anterior'], ['tres', 'Últimos 3 meses'], ['anio', 'Este año'], ['todo', 'Todo el historial'], ['otro', 'Otro periodo']]
+  return `<div class="filtros no-print">
+    <select aria-label="Periodo" data-periodo="${clave}">${ops.map(([v, t]) => `<option value="${v}" ${r.clave === v ? 'selected' : ''}>${t}</option>`).join('')}</select>
+    <label class="f">Desde<input type="date" value="${r.desde}" data-periodo-campo="${clave}" data-campo="desde"></label>
+    <label class="f">Hasta<input type="date" value="${r.hasta}" data-periodo-campo="${clave}" data-campo="hasta"></label></div>`
+}
+function filaRecibo(r, conCliente) {
+  const e = entrega(r), d = puede('dinero')
+  const cab = `<div class="split"><span>${conCliente ? esc(cliente(r.cliente).nombre) : 'Recibo del ' + fecha(r.fecha)}<small>${conCliente ? fecha(r.fecha) : ''}${d ? (conCliente ? ' · ' : '') + 'cobro ' + din(cobro(r)) + ' (' + din(r.tarifa) + '/kg)' : ''}</small></span><b class="num">${kg(r.kg)} perg.</b></div>`
+  let cuerpo
+  if (r.anulado) cuerpo = `<small class="bad">Anulado: ${esc(r.motivo)}</small>`
+  else if (e) cuerpo = `<div class="split"><small class="ok">Entregado el ${fecha(e.fecha)}: ${kg(e.kg)} de oro, rendimiento ${pct(e.kg / r.kg * 100)}${d ? ', ' + din(cobro(r) / e.kg) + ' por kg de oro' : ''}</small>${puede('anular') ? `<button class="link no-print" data-act="anularEntrega" data-id="${r.id}">Anular entrega</button>` : ''}</div>`
+  else cuerpo = (puede('registrar')
+    ? `<form class="inl" data-form="entrega" data-id="${r.id}"><input name="kg" inputmode="decimal" autocomplete="off" placeholder="kg de oro obtenidos" aria-label="Kg de oro"><input type="date" name="fecha" value="${hoy()}" min="${r.fecha}" max="${hoy()}" aria-label="Fecha de entrega"><button class="ghost">Registrar entrega</button></form>`
+    : '<small class="sub0">En proceso</small>') + (puede('anular') ? `<button class="link no-print" data-act="anularRecibo" data-id="${r.id}">Anular recibo</button>` : '')
+  return `<div class="bloque ${r.anulado ? 'tachado' : ''}">${cab}${cuerpo}</div>`
+}
+function filaPago(p, conCliente) {
+  return `<div class="row ${p.anulado ? 'tachado' : ''}"><span>${conCliente ? esc(cliente(p.cliente).nombre) : 'Pago del ' + fecha(p.fecha)}<small>${conCliente ? fecha(p.fecha) + ' · ' : ''}${METODOS[p.metodo]}${p.notas ? ' · ' + esc(p.notas) : ''}</small>${p.anulado ? `<small class="bad">Anulado: ${esc(p.motivo)}</small>` : puede('anular') ? `<button class="link no-print" data-act="anularPago" data-id="${p.id}">Anular pago</button>` : ''}</span><b class="num ok">${din(p.monto)}</b></div>`
+}
+function nombreEquipo() {
+  const ua = navigator.userAgent
+  const so = /iPhone/.test(ua) ? 'iPhone' : /iPad/.test(ua) ? 'iPad' : /Android/.test(ua) ? 'Android' : /Windows/.test(ua) ? 'Windows' : /Mac/.test(ua) ? 'Mac' : 'equipo'
+  const nav = /Edg\//.test(ua) ? 'Edge' : /Firefox/.test(ua) ? 'Firefox' : /Chrome|CriOS/.test(ua) ? 'Chrome' : /Safari/.test(ua) ? 'Safari' : 'Navegador'
+  return `${nav} en ${so}`
+}
+
+/* ---------- Pantallas de acceso ---------- */
+function vEntrada() {
+  const activos = S.usuarios.filter(u => u.activo && !u.pendiente)
+  return `<main class="centro"><h1>Trilla de café</h1>
+  <p class="sub">Demostración con datos de ejemplo. Elige con qué persona entrar para ver lo que permite cada rol.</p>
+  ${aviso()}
+  <div class="personas">${activos.map(u => `<button class="persona" data-act="entrar" data-id="${u.id}"><span>${esc(u.nombre)}<small>${ROL[u.rol]} · ${esc(u.email)}</small></span>${equipoConfiable(u) ? '<span class="chip ok">equipo de confianza</span>' : '<span class="chip">pedirá código</span>'}</button>`).join('')}</div>
+  <p class="sub" style="margin-top:16px">En la app real cada persona entra con su correo y su propia contraseña, y las cuentas solo se crean por invitación del administrador.</p></main>`
+}
+function vVerificacion() {
+  const u = S.usuarios.find(x => x.id === ses.usuario)
+  const bloq = S.intentos[u.id]?.hasta > Date.now() ? S.intentos[u.id].hasta : null
+  const rec = UI.modoRecuperar
+  return `<main class="centro"><h1>Verifica que eres tú</h1>
+  <p class="sub">${esc(u.nombre)}: es la primera vez que entras desde este equipo, o ya no es de confianza. ${rec ? 'Escribe uno de tus códigos de recuperación.' : 'Escribe el código de 6 dígitos de tu app autenticadora.'}</p>
+  <p class="aviso warn">Demostración: el código de la app es <b>${CODIGO_DEMO}</b>.${rec ? ' Tu primer código de recuperación es <b>' + esc(u.codigos[0] || '') + '</b>.' : ''}</p>
+  ${aviso()}
+  ${bloq ? `<p class="aviso bad">Demasiados intentos fallidos. Podrás volver a intentarlo a las ${new Date(bloq).toLocaleTimeString('es', { timeStyle: 'short' })}.</p><button class="ghost" data-act="desbloquear">Saltar la espera (solo en la demostración)</button>` :
+  `<form class="form" data-form="verificar">
+    <label for="cod">${rec ? 'Código de recuperación' : 'Código de la app'}</label>
+    <input id="cod" name="codigo" class="codigo" ${rec ? 'placeholder="XXXXX-XXXXX" autocapitalize="characters"' : 'inputmode="numeric" maxlength="6" autocomplete="one-time-code"'} required autofocus>
+    <label class="check"><input type="checkbox" name="recordar" checked> Confiar en este equipo 90 días (no lo marques en equipos ajenos o públicos)</label>
+    <label for="neq">Nombre de este equipo</label><input id="neq" name="nombre" value="${esc(nombreEquipo())}">
+    <button>Verificar</button></form>`}
+  <p style="text-align:center"><button class="link" data-act="modoRecuperar">${rec ? 'Usar la app autenticadora' : '¿Perdiste tu app autenticadora? Usa un código de recuperación'}</button></p>
+  <p style="text-align:center"><button class="link" data-act="salir">Volver</button></p></main>`
+}
+
+/* ---------- Pantallas de la app ---------- */
+function vResumen() {
+  const r = resumen(), u = yo(), d = puede('dinero')
+  return `<h1>Hola, ${esc(u.nombre.split(' ')[0])}</h1><p class="sub">${ROL[u.rol]}. ${DESC[u.rol]}</p>${aviso()}
+  ${d ? `<div class="sub0">Por cobrar</div><div class="big ${r.porCobrar > 0 ? 'bad' : ''}">${din(r.porCobrar)}</div>` : ''}
+  <div class="bar" aria-hidden="true"><i style="width:${r.recibido ? r.trillado / r.recibido * 100 : 0}%"></i></div>
+  <p class="sub">${num(r.trillado)} kg de pergamino ya trillados de ${num(r.recibido)} recibidos</p>
+  <div class="row"><span>Café en proceso</span><b class="num">${kg(r.enProceso)} pergamino</b></div>
+  <div class="row"><span>Entregado</span><b class="num">${kg(r.oro)} oro</b></div>
+  <div class="row"><span>Rendimiento promedio</span><b class="num">${pct(r.rend)}</b></div>
+  ${d ? `<div class="row"><span>Tarifa vigente</span><b class="num">${din(S.config.tarifa)} por kg</b></div>` : ''}
+  <h2>Pendientes de entrega (${r.pend.length})</h2>
+  ${r.pend.length ? r.pend.slice().sort((a, b) => a.fecha.localeCompare(b.fecha)).map(p => `<div class="row"><span>${esc(cliente(p.cliente).nombre)}<small>${fecha(p.fecha)}</small></span><b class="num">${kg(p.kg)}</b></div>`).join('') : '<p class="sub">No hay café pendiente.</p>'}
+  ${puede('usuarios') ? '<p style="text-align:center"><button class="link" data-act="ir" data-v="usuarios">Invitar y gestionar usuarios →</button></p>' : ''}`
+}
+function vCafe() {
+  const f = UI.filtro
+  let rs = S.recibos.slice().sort((a, b) => b.fecha.localeCompare(a.fecha) || b.creado - a.creado)
+  if (f.cliente) rs = rs.filter(r => r.cliente === f.cliente)
+  if (!f.anulados) rs = rs.filter(r => !r.anulado)
+  if (f.estado === 'pendientes') rs = rs.filter(r => !r.anulado && !entrega(r))
+  if (f.estado === 'entregados') rs = rs.filter(r => entrega(r))
+  rs = rs.filter(r => enRango(r.fecha, f))
+  return `<h1>Café recibido y entregado</h1><p class="sub">${puede('registrar') ? 'Registra el pergamino que llega y el oro que sale.' : 'Consulta el café recibido y entregado.'}</p>${aviso()}
+  ${puede('registrar') ? `<form class="form" data-form="recibo">
+    <label for="rc">Cliente</label><select id="rc" name="cliente"><option value="">Elige un cliente…</option>${opcionesClientes('', true)}</select>
+    <label for="rk">Kilogramos de pergamino</label><input id="rk" name="kg" inputmode="decimal" autocomplete="off">
+    <label for="rf">Fecha de recibo</label><input id="rf" type="date" name="fecha" value="${hoy()}" max="${hoy()}">
+    <button>Registrar recibo</button></form>` : ''}
+  <h2>Movimientos</h2>
+  <div class="filtros">
+    <select aria-label="Cliente" data-filtro="cliente"><option value="">Todos los clientes</option>${opcionesClientes(f.cliente)}</select>
+    <select aria-label="Estado" data-filtro="estado">${[['todos', 'Todos'], ['pendientes', 'En proceso'], ['entregados', 'Entregados']].map(([v, t]) => `<option value="${v}" ${f.estado === v ? 'selected' : ''}>${t}</option>`).join('')}</select>
+    <label class="f">Desde<input type="date" data-filtro="desde" value="${f.desde}"></label>
+    <label class="f">Hasta<input type="date" data-filtro="hasta" value="${f.hasta}"></label>
+    <label class="check"><input type="checkbox" data-filtro="anulados" ${f.anulados ? 'checked' : ''}> Mostrar anulados</label>
+  </div>
+  ${rs.length ? rs.map(r => filaRecibo(r, true)).join('') : '<p class="sub">No hay movimientos con estos filtros.</p>'}`
+}
+function vClientes() {
+  const d = puede('dinero'), t = UI.buscar.trim().toLowerCase()
+  const lista = S.clientes.filter(c => (UI.inactivos || c.activo) && (!t || c.nombre.toLowerCase().includes(t))).sort((a, b) => a.nombre.localeCompare(b.nombre))
+  const total = sum(S.clientes, c => cuenta(c.id).saldo)
+  const pagos = S.pagos.slice().sort((a, b) => b.fecha.localeCompare(a.fecha) || b.creado - a.creado).filter(p => !p.anulado).slice(0, 8)
+  return `<h1>Clientes y cuentas</h1>
+  ${d ? (UI.editTarifa ? `<form class="form" data-form="tarifa"><label for="tt">Tarifa por kg de pergamino</label><input id="tt" name="tarifa" inputmode="decimal" value="${S.config.tarifa}">
+    <label for="tm">Símbolo de moneda</label><input id="tm" name="moneda" maxlength="5" value="${esc(S.config.moneda)}">
+    <label for="tn">Nombre del negocio (encabeza reportes y estados de cuenta)</label><input id="tn" name="negocio" maxlength="80" value="${esc(S.config.negocio)}">
+    <div class="inl"><button>Guardar tarifa</button><button type="button" class="ghost" data-act="editTarifa">Cancelar</button></div></form>`
+    : `<p class="sub">Cobro actual: ${din(S.config.tarifa)} por kilogramo de pergamino. ${puede('tarifa') ? '<button class="link" data-act="editTarifa">Cambiar tarifa</button>' : ''}</p>`) : '<p class="sub">Clientes de la trilladora.</p>'}
+  ${aviso()}
+  ${puede('pagos') ? `<form class="form" data-form="pago">
+    <label for="pc">Registrar pago de</label><select id="pc" name="cliente"><option value="">Elige un cliente…</option>${opcionesClientes('', true)}</select>
+    <label for="pm">Monto</label><input id="pm" name="monto" inputmode="decimal" autocomplete="off">
+    <div class="dos"><div><label for="pme">Método</label><select id="pme" name="metodo">${Object.entries(METODOS).map(([v, tx]) => `<option value="${v}">${tx}</option>`).join('')}</select></div>
+    <div><label for="pf">Fecha</label><input id="pf" type="date" name="fecha" value="${hoy()}" max="${hoy()}"></div></div>
+    <label for="pn">Notas (opcional)</label><input id="pn" name="notas" maxlength="200">
+    <button>Registrar pago</button></form>` : ''}
+  <h2>${d ? 'Saldos' : 'Clientes'}</h2>
+  <div class="filtros"><input type="search" placeholder="Buscar cliente…" aria-label="Buscar cliente" data-buscar value="${esc(UI.buscar)}">
+  <label class="check"><input type="checkbox" data-act="inactivos" ${UI.inactivos ? 'checked' : ''}> Mostrar inactivos</label></div>
+  ${d ? `<div class="row"><b>Total por cobrar</b><b class="num ${total > 0 ? 'bad' : 'ok'}">${din(total)}</b></div>` : ''}
+  ${lista.map(c => { const k = cuenta(c.id); return `<div class="row" role="button" tabindex="0" style="cursor:pointer" data-act="ficha" data-id="${c.id}"><span>${esc(c.nombre)} ${c.activo ? '' : '<span class="chip">inactivo</span>'}<small>${d ? `Cobrado ${din(k.cobrado)}, pagado ${din(k.pagado)}` : esc(c.tel || 'Sin teléfono')}</small></span>${d ? `<b class="num ${k.saldo > 0 ? 'bad' : 'ok'}">${din(k.saldo)}</b>` : '<span aria-hidden="true">›</span>'}</div>` }).join('') || '<p class="sub">No hay clientes que coincidan.</p>'}
+  ${puede('clientes') ? `<h2>Nuevo cliente</h2><form class="form" data-form="cliente">
+    <label for="cn">Nombre</label><input id="cn" name="nombre" maxlength="120">
+    <label for="ct">Teléfono (opcional)</label><input id="ct" name="tel" type="tel" maxlength="30">
+    <label for="cno">Notas (opcional)</label><input id="cno" name="notas" maxlength="300">
+    <button>Agregar cliente</button></form>` : ''}
+  ${d ? `<h2>Pagos recientes</h2>${pagos.map(p => filaPago(p, true)).join('') || '<p class="sub">Aún no hay pagos.</p>'}` : ''}`
+}
+function vFicha() {
+  const c = S.clientes.find(x => x.id === UI.id)
+  if (!c) return '<p>Cliente no encontrado.</p>'
+  const d = puede('dinero'), k = cuenta(c.id)
+  const rs = S.recibos.filter(r => r.cliente === c.id).sort((a, b) => b.fecha.localeCompare(a.fecha))
+  const ent = rs.filter(r => !r.anulado && entrega(r)), enProceso = sum(rs.filter(r => !r.anulado && !entrega(r)), r => r.kg)
+  const kgE = sum(ent, r => r.kg), oro = sum(ent, r => entrega(r).kg)
+  const ps = S.pagos.filter(p => p.cliente === c.id).sort((a, b) => b.fecha.localeCompare(a.fecha))
+  return `<p class="sub0"><button class="link" data-act="ir" data-v="clientes">← Clientes</button></p>
+  <h1>${esc(c.nombre)} ${c.activo ? '' : '<span class="chip">inactivo</span>'}</h1>
+  <p class="sub">${esc(c.tel || 'Sin teléfono')}${c.notas ? ' · ' + esc(c.notas) : ''} ${puede('clientes') && !UI.editCliente ? '<button class="link" data-act="editCliente">Editar</button>' : ''}</p>
+  ${aviso()}
+  ${UI.editCliente ? `<form class="form" data-form="editarCliente" data-id="${c.id}">
+    <label for="en">Nombre</label><input id="en" name="nombre" value="${esc(c.nombre)}" maxlength="120">
+    <label for="et">Teléfono</label><input id="et" name="tel" value="${esc(c.tel)}" maxlength="30">
+    <label for="eno">Notas</label><input id="eno" name="notas" value="${esc(c.notas)}" maxlength="300">
+    <label class="check"><input type="checkbox" name="activo" ${c.activo ? 'checked' : ''}> Cliente activo (los inactivos no aparecen al registrar recibos ni pagos)</label>
+    <div class="inl"><button>Guardar</button><button type="button" class="ghost" data-act="editCliente">Cancelar</button></div></form>` : ''}
+  <h2>Cuenta</h2>
+  ${d ? `<p class="sub0"><button class="link" data-act="ir" data-v="estado" data-id="${c.id}">Estado de cuenta imprimible →</button></p>
+  <div class="row"><span>Cobrado</span><b class="num">${din(k.cobrado)}</b></div><div class="row"><span>Pagado</span><b class="num">${din(k.pagado)}</b></div>
+  <div class="row"><b>Saldo</b><b class="num ${k.saldo > 0 ? 'bad' : 'ok'}">${din(k.saldo)}</b></div>` : ''}
+  <div class="row"><span>Café en proceso</span><b class="num">${kg(enProceso)} pergamino</b></div>
+  <div class="row"><span>Oro entregado</span><b class="num">${kg(oro)}</b></div>
+  <div class="row"><span>Rendimiento promedio</span><b class="num">${pct(kgE ? oro / kgE * 100 : null)}</b></div>
+  <h2>Recibos</h2>${rs.map(r => filaRecibo(r, false)).join('') || '<p class="sub">Sin recibos.</p>'}
+  ${d ? `<h2>Pagos</h2>${ps.map(p => filaPago(p, false)).join('') || '<p class="sub">Sin pagos.</p>'}` : ''}`
+}
+function movimientosEstado(cid, r) {
+  const saldoInicial = r.desde ? cuenta(cid, masDias(r.desde, -1)).saldo : 0
+  const movs = [
+    ...vigentes().filter(x => x.cliente === cid && enRango(x.fecha, r)).map(x => { const e = entrega(x); return { fecha: x.fecha, orden: 1, creado: x.creado, concepto: `Trilla de ${kg(x.kg)} de pergamino a ${din(x.tarifa)}/kg · ${e ? kg(e.kg) + ' de oro (' + pct(e.kg / x.kg * 100) + ')' : 'en proceso'}`, cargo: cobro(x), abono: null } }),
+    ...S.pagos.filter(p => !p.anulado && p.cliente === cid && enRango(p.fecha, r)).map(p => ({ fecha: p.fecha, orden: 2, creado: p.creado, concepto: `Pago (${METODOS[p.metodo]})${p.notas ? ' · ' + p.notas : ''}`, cargo: null, abono: p.monto })),
+  ].sort((a, b) => a.fecha.localeCompare(b.fecha) || a.orden - b.orden || a.creado - b.creado)
+  let s = saldoInicial
+  movs.forEach(m => { s += (m.cargo || 0) - (m.abono || 0); m.saldo = s })
+  return { saldoInicial, movs, final: s, cargos: sum(movs, m => m.cargo || 0), abonos: sum(movs, m => m.abono || 0) }
+}
+function vEstado() {
+  const c = S.clientes.find(x => x.id === UI.id), r = UI.periodoEC, e = movimientosEstado(c.id, r)
+  return `<p class="sub0 no-print"><button class="link" data-act="ficha" data-id="${c.id}">← Volver al cliente</button></p>
+  <div class="solo-imprimir"><b>${esc(S.config.negocio)}</b><p class="sub">Generado el ${new Date().toLocaleDateString('es', { dateStyle: 'long' })}</p></div>
+  <h1>Estado de cuenta</h1><p class="sub"><b>${esc(c.nombre)}</b>${c.tel ? ' · ' + esc(c.tel) : ''} · ${describir(r)}</p>
+  ${selectorPeriodo('periodoEC')}${aviso()}
+  <div class="sc"><table><thead><tr><th>Fecha</th><th class="izq">Concepto</th><th>Cargo</th><th>Abono</th><th>Saldo</th></tr></thead><tbody>
+  <tr><td>${r.desde ? fecha(r.desde) : ''}</td><td class="concepto">Saldo anterior</td><td></td><td></td><td>${din(e.saldoInicial)}</td></tr>
+  ${e.movs.map(m => `<tr><td>${fecha(m.fecha)}</td><td class="concepto">${esc(m.concepto)}</td><td>${m.cargo == null ? '' : din(m.cargo)}</td><td class="ok">${m.abono == null ? '' : din(m.abono)}</td><td>${din(m.saldo)}</td></tr>`).join('')}
+  </tbody><tfoot><tr><th></th><th class="izq">Totales</th><th>${din(e.cargos)}</th><th>${din(e.abonos)}</th><th></th></tr></tfoot></table></div>
+  <div class="row"><b>Saldo al ${fecha(r.hasta || hoy())}</b><b class="num ${e.final > 0 ? 'bad' : 'ok'}" style="font:600 24px Georgia,serif">${din(e.final)}</b></div>
+  <div class="inl no-print"><button class="ghost" data-act="imprimir">Imprimir o PDF</button><button class="ghost" data-act="csvEstado">Descargar para Excel</button><button class="ghost" data-act="copiarEstado">Copiar resumen</button></div>`
+}
+function vCalculadora() {
+  const r = resumen(), d = puede('dinero')
+  return `<h1>Calculadora de trilla</h1><p class="sub">${d ? 'Estima el oro que saldrá y lo que cobrarás.' : 'Estima el oro que saldrá de un lote.'} No se guarda nada.</p>
+  <div class="form" id="calc"><label for="k1">Kilogramos de pergamino</label><input id="k1" inputmode="decimal" value="2500">
+  <label for="k2">Rendimiento esperado (%)</label><input id="k2" inputmode="decimal" value="${r.rend ? Math.round(r.rend * 10) / 10 : 80}">
+  ${r.rend ? `<small class="sub0">Rendimiento promedio de la trilladora: ${pct(r.rend)}.</small>` : ''}
+  ${d ? `<label for="k3">Tarifa por kg de pergamino (${esc(S.config.moneda)})</label><input id="k3" inputmode="decimal" value="${S.config.tarifa}">` : ''}</div>
+  <h2>Resultado</h2><div id="kout"></div>`
+}
+function calc() {
+  const q = leer($('#k1').value), r = leer($('#k2').value), t = $('#k3') ? leer($('#k3').value) : NaN, d = puede('dinero')
+  const oro = q > 0 && r >= 0 && r <= 100 ? q * r / 100 : NaN, c = q > 0 && t >= 0 ? q * t : NaN
+  $('#kout').innerHTML = (r > 100 ? '<p class="aviso bad">El rendimiento no puede pasar de 100%.</p>' : '') +
+    `<div class="row"><span>Oro esperado</span><b class="num">${isFinite(oro) ? kg(oro) : '—'}</b></div>` +
+    (d ? `<div class="row"><span>Cobro por la trilla</span><b class="num">${isFinite(c) ? din(c) : '—'}</b></div><div class="row"><span>Costo por kilogramo de oro</span><b class="num">${isFinite(c) && oro > 0 ? din(c / oro) : '—'}</b></div>` : '')
+}
+function filasReporte(r) {
+  return S.clientes.map(c => {
+    const rs = vigentes().filter(x => x.cliente === c.id && enRango(x.fecha, r)), ent = rs.filter(x => entrega(x))
+    const kgE = sum(ent, x => x.kg), oro = sum(ent, x => entrega(x).kg)
+    const pagado = sum(S.pagos.filter(p => !p.anulado && p.cliente === c.id && enRango(p.fecha, r)), p => p.monto)
+    return { c, recibido: sum(rs, x => x.kg), entregado: kgE, oro, rend: kgE ? oro / kgE * 100 : null, cobrado: sum(rs, cobro), pagado, saldo: cuenta(c.id, r.hasta || null).saldo }
+  }).filter(f => f.c.activo || f.recibido || f.pagado || f.saldo).sort((a, b) => a.c.nombre.localeCompare(b.c.nombre))
+}
+function vReportes() {
+  const r = UI.periodo, fs = filasReporte(r), T = k => sum(fs, f => f[k])
+  const rendT = T('entregado') ? T('oro') / T('entregado') * 100 : null
+  return `<div class="solo-imprimir"><b>${esc(S.config.negocio)}</b><p class="sub">Generado el ${new Date().toLocaleString('es', { dateStyle: 'long', timeStyle: 'short' })}</p></div>
+  <h1>Reportes</h1><p class="sub">Resumen por cliente · ${describir(r)}</p>${selectorPeriodo('periodo')}${aviso()}
+  <div class="sc"><table><thead><tr><th>Cliente</th><th>Recibido</th><th>Oro</th><th>Rend.</th><th>Cobrado</th><th>Pagado</th><th>Saldo</th></tr></thead><tbody>
+  ${fs.map(f => `<tr><td><button class="link" data-act="ficha" data-id="${f.c.id}">${esc(f.c.nombre)}</button></td><td>${num(f.recibido)}</td><td>${num(f.oro)}</td><td>${pct(f.rend)}</td><td>${din(f.cobrado)}</td><td>${din(f.pagado)}</td><td class="${f.saldo > 0 ? 'bad' : ''}">${din(f.saldo)}</td></tr>`).join('')}
+  </tbody><tfoot><tr><th>Total</th><th>${num(T('recibido'))}</th><th>${num(T('oro'))}</th><th>${pct(rendT)}</th><th>${din(T('cobrado'))}</th><th>${din(T('pagado'))}</th><th>${din(T('saldo'))}</th></tr></tfoot></table></div>
+  <p class="sub">Recibido, oro y cobrado: recibos con fecha en el periodo (kg de pergamino y de oro). Pagado: pagos del periodo. Saldo: deuda total de cada cliente a la fecha final. El rendimiento solo cuenta lo ya entregado.</p>
+  <h2 class="no-print">Exportar</h2>
+  <div class="inl no-print"><button class="ghost" data-act="csvReporte">Descargar para Excel</button><button class="ghost" data-act="imprimir">Imprimir o PDF</button><button class="ghost" data-act="csvMovimientos">Movimientos del periodo</button></div>
+  ${puede('usuarios') ? '<div class="tarjeta no-print" style="margin-top:16px"><b>Copia de seguridad</b><p class="sub">Todos los recibos y pagos, incluidos los anulados. Se recomienda descargarla cada mes y guardarla fuera del equipo.</p><button class="ghost" data-act="csvCopia">Descargar copia completa</button></div>' : ''}`
+}
+function listaEquipos(u, propio) {
+  if (!u.equipos.length) return '<p class="sub0">No hay equipos de confianza.</p>'
+  return u.equipos.map(e => { const vig = !e.revocado && e.vence >= hoy(); return `<div class="row"><span>${esc(e.nombre)} ${e.id === EQUIPO ? '<span class="chip ok">este equipo</span>' : ''}<small>Registrado el ${fecha(e.creado)} · ${e.revocado ? 'revocado el ' + fecha(e.revocado) : vig ? 'confiable hasta el ' + fecha(e.vence) : 'venció el ' + fecha(e.vence)}</small></span>${vig ? `<button class="ghost" style="width:auto" data-act="revocar" data-u="${u.id}" data-id="${e.id}">Revocar</button>` : ''}</div>` }).join('')
+}
+function vUsuarios() {
+  const activos = S.usuarios.filter(u => u.activo).length
+  return `<h1>Usuarios</h1><p class="sub">${activos} de ${CUPO} usuarios activos. Las cuentas solo se crean por invitación.</p>${aviso()}
+  <h2>Invitar a una persona</h2><form class="form" data-form="invitar">
+  <label for="in">Nombre</label><input id="in" name="nombre" maxlength="80" required>
+  <label for="ie">Correo</label><input id="ie" name="email" type="email" required>
+  <label for="ir">Rol</label><select id="ir" name="rol">${Object.entries(ROL).map(([v, t]) => `<option value="${v}" ${v === 'operador' ? 'selected' : ''}>${t}</option>`).join('')}</select>
+  <button ${activos >= CUPO ? 'disabled' : ''}>${activos >= CUPO ? 'Cupo completo' : 'Enviar invitación'}</button></form>
+  <h2>Equipo</h2>
+  ${S.usuarios.map(u => { const mio = u.id === yo().id, vig = u.equipos.filter(e => !e.revocado && e.vence >= hoy()); return `<div class="bloque">
+    <div class="split"><span>${esc(u.nombre)} ${mio ? '<span class="chip">tú</span>' : ''}<small>${esc(u.email)} · ${ROL[u.rol]}</small></span>${!u.activo ? '<span class="chip bad">Desactivado</span>' : u.pendiente ? '<span class="chip warn">Invitación pendiente</span>' : '<span class="chip ok">Activo</span>'}</div>
+    <div class="inl">
+      <select aria-label="Rol de ${esc(u.nombre)}" data-rol="${u.id}" ${mio ? 'disabled' : ''}>${Object.entries(ROL).map(([v, t]) => `<option value="${v}" ${u.rol === v ? 'selected' : ''}>${t}</option>`).join('')}</select>
+      ${mio ? '' : `<button class="ghost" data-act="activar" data-id="${u.id}">${u.activo ? 'Desactivar' : 'Activar'}</button>`}
+      ${u.pendiente && u.activo ? `<button class="ghost" data-act="aceptar" data-id="${u.id}">Simular que aceptó</button>` : ''}
+      <button class="ghost" data-act="abrir" data-id="${u.id}">Equipos (${vig.length})</button>
+    </div>
+    ${UI.abierto === u.id ? `<div class="tarjeta">${listaEquipos(u)}${mio ? '' : `<button class="link" data-act="restablecer" data-id="${u.id}">Restablecer verificación en dos pasos (perdió el celular y los códigos)</button>`}</div>` : ''}
+  </div>` }).join('')}
+  <h2>Historial de cambios</h2><p class="sub">Nada se borra: cada cambio en pagos, tarifas, usuarios y registros queda aquí con quién y cuándo.</p>
+  ${S.auditoria.slice(0, 15).map(a => `<div class="row"><span>${esc(a.que)}<small>${esc(a.quien)}</small></span><small class="num">${new Date(a.cuando).toLocaleString('es', { dateStyle: 'short', timeStyle: 'short' })}</small></div>`).join('')}`
+}
+function vCuenta() {
+  const u = yo()
+  return `<h1>Mi cuenta</h1><p class="sub">${esc(u.email)} · ${ROL[u.rol]}</p>${aviso()}
+  <h2>Nombre</h2><form class="inl" data-form="nombre"><input name="nombre" value="${esc(u.nombre)}" maxlength="80" aria-label="Nombre"><button>Guardar</button></form>
+  <h2>Equipos de confianza</h2><p class="sub">Desde estos equipos entras sin código. Revoca cualquiera que ya no uses o que hayas perdido.</p>${listaEquipos(u)}
+  <h2>Verificación en dos pasos</h2>
+  <div class="row"><span>Códigos de recuperación<small>Te quedan ${u.codigos.length} de 10. Cada uno sirve una sola vez.</small></span><button class="ghost" style="width:auto" data-act="verCodigos">${UI.codigosVisibles ? 'Ocultar' : 'Ver'}</button></div>
+  ${UI.codigosVisibles ? `<ol class="codigos">${u.codigos.map(c => `<li>${c}</li>`).join('')}</ol><button class="ghost" data-act="nuevosCodigos">Generar códigos nuevos</button>` : ''}
+  <h2>Instalar la app</h2><p class="sub">La app real se instala como aplicación en Windows, Mac, iPhone y Android, con su propio icono. Esta demostración es una sola página.</p>
+  <h2>Demostración</h2><p class="sub">Los datos de ejemplo viven solo en este navegador.</p>
+  <div class="inl"><button class="ghost" data-act="restaurar">Restaurar datos de ejemplo</button><button data-act="salir">Salir</button></div>`
+}
+
+/* ---------- Armado ---------- */
+const PESTANAS = [['resumen', '📊', 'Resumen', null], ['cafe', '☕', 'Café', ['registrar', 'dinero']], ['clientes', '👥', 'Clientes', null], ['calculadora', '🧮', 'Calculadora', null], ['reportes', '📋', 'Reportes', ['reportes']]]
+const VISTAS = { resumen: vResumen, cafe: vCafe, clientes: vClientes, ficha: vFicha, estado: vEstado, calculadora: vCalculadora, reportes: vReportes, usuarios: vUsuarios, cuenta: vCuenta }
+function permitida(v) {
+  if (v === 'cafe') return puede('registrar') || puede('dinero')
+  if (v === 'reportes') return puede('reportes')
+  if (v === 'estado') return puede('dinero')
+  if (v === 'usuarios') return puede('usuarios')
+  return true
+}
+function banner() {
+  const u = yo()
+  return `<div class="demo"><div><span><b>Demostración</b> · datos de ejemplo guardados solo en este navegador</span>
+  <label>Ver como <select data-vercomo>${u ? '' : '<option value="">Elige…</option>'}${S.usuarios.filter(x => x.activo && !x.pendiente).map(x => `<option value="${x.id}" ${u && u.id === x.id ? 'selected' : ''}>${esc(x.nombre.split(' ')[0])} · ${ROL[x.rol]}</option>`).join('')}</select></label></div></div>`
+}
+function render() {
+  const u = yo()
+  if (!u) { ses = { usuario: null, verificado: false }; $('#raiz').innerHTML = banner() + vEntrada(); return }
+  if (!ses.verificado) { $('#raiz').innerHTML = banner() + vVerificacion(); return }
+  if (!permitida(UI.vista)) UI.vista = 'resumen'
+  const activa = UI.vista === 'ficha' || UI.vista === 'estado' ? 'clientes' : UI.vista
+  $('#raiz').innerHTML = banner() +
+    `<header class="cab"><b>Trilla de café</b><nav>${puede('usuarios') ? `<button class="${UI.vista === 'usuarios' ? 'on' : ''}" data-act="ir" data-v="usuarios">Usuarios</button>` : ''}<button class="${UI.vista === 'cuenta' ? 'on' : ''}" data-act="ir" data-v="cuenta">${esc(u.nombre.split(' ')[0])}</button></nav></header>
+    <main>${VISTAS[UI.vista]()}</main>
+    <nav class="tabs" aria-label="Secciones">${PESTANAS.filter(p => !p[3] || p[3].some(puede)).map(p => `<button class="${activa === p[0] ? 'on' : ''}" data-act="ir" data-v="${p[0]}"><span aria-hidden="true">${p[1]}</span>${p[2]}</button>`).join('')}</nav>`
+  if (UI.vista === 'calculadora') calc()
+}
+function ir(v, id) { UI.vista = v; if (id) UI.id = id; UI.msg = null; UI.editCliente = false; UI.editTarifa = false; render(); window.scrollTo(0, 0) }
+function entrarComo(id) {
+  const u = S.usuarios.find(x => x.id === id)
+  ses = { usuario: id, verificado: false }; UI.modoRecuperar = false; UI.vista = 'resumen'; UI.msg = null; UI.codigosVisibles = false; UI.abierto = null
+  if (equipoConfiable(u)) { ses.verificado = true; decir('Entraste sin código porque este es un equipo de confianza.') }
+  persistir(); render(); window.scrollTo(0, 0)
+}
+
+/* ---------- Descargas (CSV que abre Excel) ---------- */
+function descargarCSV(nombre, filas) {
+  const celda = v => { if (v == null) return ''; if (typeof v === 'number') return String(Math.round(v * 100) / 100).replace('.', ','); const s = String(v); return /[;"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s }
+  const texto = '﻿' + filas.map(f => f.map(celda).join(';')).join('\r\n')
+  const url = URL.createObjectURL(new Blob([texto], { type: 'text/csv;charset=utf-8' }))
+  const a = Object.assign(document.createElement('a'), { href: url, download: nombre })
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 2000)
+}
+const slug = t => t.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+
+/* ---------- Acciones ---------- */
+const A = {
+  entrar: d => entrarComo(d.id),
+  salir: () => { ses = { usuario: null, verificado: false }; UI.msg = null; persistir(); render() },
+  modoRecuperar: () => { UI.modoRecuperar = !UI.modoRecuperar; UI.msg = null; render() },
+  desbloquear: () => { delete S.intentos[ses.usuario]; UI.msg = null; persistir(); render() },
+  ir: d => ir(d.v, d.id),
+  ficha: d => ir('ficha', d.id),
+  editTarifa: () => { UI.editTarifa = !UI.editTarifa; render() },
+  editCliente: () => { UI.editCliente = !UI.editCliente; render() },
+  inactivos: () => { UI.inactivos = !UI.inactivos; render() },
+  abrir: d => { UI.abierto = UI.abierto === d.id ? null : d.id; render() },
+  imprimir: () => window.print(),
+  anularRecibo: d => {
+    const r = S.recibos.find(x => x.id === d.id), m = prompt('Motivo para anular el recibo:')?.trim(); if (!m) return
+    r.anulado = true; r.motivo = m; auditar(`Anuló un recibo de ${cliente(r.cliente).nombre} (${kg(r.kg)}): ${m}`); decir('Recibo anulado.'); persistir(); render()
+  },
+  anularEntrega: d => {
+    const r = S.recibos.find(x => x.id === d.id), e = entrega(r), m = prompt('Motivo para anular la entrega:')?.trim(); if (!m) return
+    e.anulada = true; e.motivo = m; auditar(`Anuló la entrega de ${cliente(r.cliente).nombre} (${kg(e.kg)} de oro): ${m}`); decir('Entrega anulada: el recibo vuelve a estar en proceso.'); persistir(); render()
+  },
+  anularPago: d => {
+    const p = S.pagos.find(x => x.id === d.id), m = prompt(`Motivo para anular el pago de ${din(p.monto)}:`)?.trim(); if (!m) return
+    p.anulado = true; p.motivo = m; auditar(`Anuló un pago de ${cliente(p.cliente).nombre} por ${din(p.monto)}: ${m}`); decir('Pago anulado.'); persistir(); render()
+  },
+  activar: d => {
+    const u = S.usuarios.find(x => x.id === d.id)
+    if (!u.activo && S.usuarios.filter(x => x.activo).length >= CUPO) { decir(`Ya hay ${CUPO} usuarios activos. Desactiva uno para activar otro.`, 'bad'); return render() }
+    if (!confirm(`¿Seguro que quieres ${u.activo ? 'desactivar' : 'activar'} a ${u.nombre}?`)) return
+    u.activo = !u.activo; auditar(`${u.activo ? 'Activó' : 'Desactivó'} a ${u.nombre}`); decir(u.activo ? 'Usuario activado.' : 'Usuario desactivado. Ya no puede entrar.'); persistir(); render()
+  },
+  aceptar: d => { const u = S.usuarios.find(x => x.id === d.id); u.pendiente = false; auditar(`${u.nombre} aceptó la invitación`); decir(`${u.nombre} ya puede entrar. Pruébalo con «Ver como».`); persistir(); render() },
+  revocar: d => {
+    const u = S.usuarios.find(x => x.id === d.u), e = u.equipos.find(x => x.id === d.id)
+    if (!confirm(e.id === EQUIPO ? 'Es el equipo que estás usando: la próxima vez que entres pedirá código. ¿Continuar?' : `¿Revocar «${e.nombre}»?`)) return
+    e.revocado = hoy(); auditar(`Revocó el equipo «${e.nombre}» de ${u.nombre}`); decir('Equipo revocado. La próxima vez que entre desde ese equipo pedirá código.'); persistir(); render()
+  },
+  restablecer: d => {
+    const u = S.usuarios.find(x => x.id === d.id)
+    if (!confirm(`¿Restablecer la verificación de ${u.nombre}? Se revocan sus equipos y deberá configurar su app autenticadora de nuevo.`)) return
+    u.equipos.forEach(e => { if (!e.revocado) e.revocado = hoy() }); u.codigos = codigosNuevos(); delete S.intentos[u.id]
+    auditar(`Restableció la verificación en dos pasos de ${u.nombre}`); decir('Verificación restablecida.'); persistir(); render()
+  },
+  verCodigos: () => { UI.codigosVisibles = !UI.codigosVisibles; render() },
+  nuevosCodigos: () => { if (!confirm('Los códigos anteriores dejarán de servir. ¿Continuar?')) return; yo().codigos = codigosNuevos(); auditar('Generó códigos de recuperación nuevos'); decir('Códigos nuevos generados. Guárdalos fuera del celular.'); persistir(); render() },
+  restaurar: () => { if (!confirm('Se borran los cambios de la demostración y vuelven los datos de ejemplo. ¿Continuar?')) return; S = semilla(); ses = { usuario: null, verificado: false }; UI.msg = null; persistir(); render() },
+  copiarEstado: () => {
+    const c = S.clientes.find(x => x.id === UI.id), e = movimientosEstado(c.id, UI.periodoEC)
+    const t = `${S.config.negocio}\nEstado de cuenta de ${c.nombre}\n${describir(UI.periodoEC)}\n\nCargos: ${din(e.cargos)}\nAbonos: ${din(e.abonos)}\nSaldo al ${fecha(UI.periodoEC.hasta || hoy())}: ${din(e.final)}`
+    const fallo = () => { decir('No se pudo copiar automáticamente en este navegador.', 'bad'); render() }
+    if (!navigator.clipboard) return fallo()
+    navigator.clipboard.writeText(t).then(() => { decir('Resumen copiado. Pégalo en WhatsApp o en un correo.'); render() }, fallo)
+  },
+  csvEstado: () => {
+    const c = S.clientes.find(x => x.id === UI.id), r = UI.periodoEC, e = movimientosEstado(c.id, r)
+    descargarCSV(`estado-cuenta-${slug(c.nombre)}-${r.hasta || hoy()}.csv`, [[S.config.negocio], [`Estado de cuenta de ${c.nombre}`], [describir(r)], [], ['Fecha', 'Concepto', 'Cargo', 'Abono', 'Saldo'], [r.desde || '', 'Saldo anterior', null, null, e.saldoInicial], ...e.movs.map(m => [m.fecha, m.concepto, m.cargo, m.abono, m.saldo]), ['', 'Totales y saldo final', e.cargos, e.abonos, e.final]])
+  },
+  csvReporte: () => {
+    const r = UI.periodo, fs = filasReporte(r)
+    descargarCSV(`reporte-clientes-${r.desde || 'inicio'}-a-${r.hasta || hoy()}.csv`, [[S.config.negocio], [`Reporte por cliente · ${describir(r)}`], [], ['Cliente', 'Recibido (kg pergamino)', 'Entregado (kg pergamino)', 'Oro (kg)', 'Rendimiento (%)', `Cobrado (${S.config.moneda})`, `Pagado (${S.config.moneda})`, `Saldo al corte (${S.config.moneda})`], ...fs.map(f => [f.c.nombre, f.recibido, f.entregado, f.oro, f.rend, f.cobrado, f.pagado, f.saldo])])
+  },
+  csvMovimientos: () => {
+    const r = UI.periodo
+    descargarCSV(`movimientos-${r.desde || 'inicio'}-a-${r.hasta || hoy()}.csv`, [['Tipo', 'Fecha', 'Cliente', 'Kg pergamino', 'Tarifa', 'Cobro', 'Fecha entrega', 'Kg oro', 'Pago', 'Método'],
+      ...vigentes().filter(x => enRango(x.fecha, r)).map(x => { const e = entrega(x); return ['Recibo', x.fecha, cliente(x.cliente).nombre, x.kg, x.tarifa, cobro(x), e ? e.fecha : '', e ? e.kg : null, null, ''] }),
+      ...S.pagos.filter(p => !p.anulado && enRango(p.fecha, r)).map(p => ['Pago', p.fecha, cliente(p.cliente).nombre, null, null, null, '', null, p.monto, METODOS[p.metodo]])])
+  },
+  csvCopia: () => {
+    descargarCSV(`copia-trilla-${hoy()}.csv`, [['Tipo', 'Fecha', 'Cliente', 'Kg pergamino', 'Tarifa', 'Kg oro', 'Monto', 'Estado'],
+      ...S.recibos.map(x => { const e = entrega(x); return ['Recibo', x.fecha, cliente(x.cliente).nombre, x.kg, x.tarifa, e ? e.kg : null, cobro(x), x.anulado ? 'Anulado: ' + x.motivo : 'Vigente'] }),
+      ...S.pagos.map(p => ['Pago', p.fecha, cliente(p.cliente).nombre, null, null, null, p.monto, p.anulado ? 'Anulado: ' + p.motivo : 'Vigente'])])
+  },
+}
+const F = {
+  verificar: d => {
+    const u = S.usuarios.find(x => x.id === ses.usuario), it = S.intentos[u.id] || (S.intentos[u.id] = { fallos: 0, hasta: 0 })
+    const cod = String(d.codigo || '').trim()
+    let ok = false
+    if (UI.modoRecuperar) { const n = cod.toUpperCase().replace(/[^A-Z0-9]/g, ''); const i = u.codigos.findIndex(c => c.replace('-', '') === n); if (i >= 0) { u.codigos.splice(i, 1); ok = true } }
+    else ok = cod === CODIGO_DEMO
+    if (!ok) {
+      it.fallos++
+      if (it.fallos >= 5) { it.fallos = 0; it.hasta = Date.now() + 15 * 60e3; decir('Demasiados intentos fallidos. Espera 15 minutos.', 'bad') }
+      else decir(`Código incorrecto. Te quedan ${5 - it.fallos} intentos.`, 'bad')
+      persistir(); return render()
+    }
+    delete S.intentos[u.id]; ses.verificado = true
+    if (d.recordar) { u.equipos = u.equipos.filter(e => e.id !== EQUIPO); u.equipos.unshift({ id: EQUIPO, nombre: (d.nombre || 'Equipo').slice(0, 80), creado: hoy(), vence: masDias(hoy(), 90), revocado: null }) }
+    decir(UI.modoRecuperar ? `Entraste con un código de recuperación. Te quedan ${u.codigos.length}.` : d.recordar ? 'Verificado. Este equipo queda como de confianza 90 días.' : 'Verificado. Este equipo no se recordará.')
+    UI.modoRecuperar = false; persistir(); render()
+  },
+  recibo: d => {
+    const k = leer(d.kg)
+    if (!d.cliente) { decir('Elige el cliente.', 'bad'); return render() }
+    if (!(k > 0)) { decir('Escribe los kg de pergamino recibidos.', 'bad'); return render() }
+    if (d.fecha > hoy()) { decir('La fecha no puede ser futura.', 'bad'); return render() }
+    S.recibos.push({ id: uid(), cliente: d.cliente, fecha: d.fecha || hoy(), kg: k, tarifa: S.config.tarifa, anulado: false, motivo: null, creado: Date.now(), entregas: [] })
+    decir(`Recibo registrado: ${kg(k)} de pergamino de ${cliente(d.cliente).nombre}.`); persistir(); render()
+  },
+  entrega: (d, f) => {
+    const r = S.recibos.find(x => x.id === f.dataset.id), k = leer(d.kg)
+    if (!(k > 0)) { decir('Escribe los kg de oro obtenidos.', 'bad'); return render() }
+    if (k > r.kg) { decir('Los kg de oro no pueden superar los kg de pergamino recibidos.', 'bad'); return render() }
+    if (d.fecha < r.fecha) { decir('La entrega no puede ser anterior al recibo.', 'bad'); return render() }
+    if (d.fecha > hoy()) { decir('La fecha no puede ser futura.', 'bad'); return render() }
+    r.entregas.push({ id: uid(), fecha: d.fecha, kg: k, anulada: false })
+    decir(`Entrega registrada: ${kg(k)} de oro (${pct(k / r.kg * 100)}).`); persistir(); render()
+  },
+  pago: d => {
+    const m = leer(d.monto)
+    if (!d.cliente) { decir('Elige el cliente que paga.', 'bad'); return render() }
+    if (!(m > 0)) { decir('Escribe el monto del pago.', 'bad'); return render() }
+    S.pagos.push({ id: uid(), cliente: d.cliente, fecha: d.fecha || hoy(), monto: m, metodo: d.metodo, notas: (d.notas || '').trim(), anulado: false, motivo: null, creado: Date.now() })
+    auditar(`Registró un pago de ${cliente(d.cliente).nombre} por ${din(m)}`); decir(`Pago de ${din(m)} registrado para ${cliente(d.cliente).nombre}.`); persistir(); render()
+  },
+  tarifa: d => {
+    const t = leer(d.tarifa); if (!(t >= 0)) { decir('Escribe una tarifa válida.', 'bad'); return render() }
+    const moneda = (d.moneda || '$').trim() || '$'
+    if (t !== S.config.tarifa) auditar(`Cambió la tarifa de ${din(S.config.tarifa)} a ${moneda}${num(t)} por kg`)
+    S.config.tarifa = t; S.config.moneda = moneda; S.config.negocio = (d.negocio || '').trim() || 'Trilla de café'
+    UI.editTarifa = false; decir('Tarifa actualizada. Se aplica a los recibos nuevos; los anteriores conservan la suya.'); persistir(); render()
+  },
+  cliente: d => {
+    const n = (d.nombre || '').trim(); if (!n) { decir('Escribe el nombre del cliente.', 'bad'); return render() }
+    S.clientes.push({ id: uid(), nombre: n, tel: (d.tel || '').trim(), notas: (d.notas || '').trim(), activo: true })
+    decir(`Cliente «${n}» agregado.`); persistir(); render()
+  },
+  editarCliente: (d, f) => {
+    const c = S.clientes.find(x => x.id === f.dataset.id), n = (d.nombre || '').trim(); if (!n) { decir('El nombre no puede quedar vacío.', 'bad'); return render() }
+    Object.assign(c, { nombre: n, tel: (d.tel || '').trim(), notas: (d.notas || '').trim(), activo: !!d.activo }); UI.editCliente = false; decir('Cliente actualizado.'); persistir(); render()
+  },
+  invitar: d => {
+    const email = (d.email || '').trim().toLowerCase(), nombre = (d.nombre || '').trim()
+    if (S.usuarios.some(u => u.email === email)) { decir('Ya existe un usuario con ese correo.', 'bad'); return render() }
+    if (S.usuarios.filter(u => u.activo).length >= CUPO) { decir(`Ya hay ${CUPO} usuarios activos.`, 'bad'); return render() }
+    S.usuarios.push({ id: uid(), nombre, email, rol: d.rol, activo: true, pendiente: true, equipos: [], codigos: codigosNuevos() })
+    auditar(`Invitó a ${nombre} como ${ROL[d.rol]}`); decir(`Invitación enviada a ${email}. En la app real le llega un correo para crear su contraseña.`); persistir(); render()
+  },
+  nombre: d => { const n = (d.nombre || '').trim(); if (n) { yo().nombre = n; decir('Nombre guardado.'); persistir() } render() },
+}
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if (!b) return
+  if (A[b.dataset.act]) A[b.dataset.act](b.dataset, b)
+})
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches('[role="button"][data-act]')) e.target.click() })
+document.addEventListener('submit', e => {
+  const f = e.target.closest('form[data-form]'); if (!f) return
+  e.preventDefault(); F[f.dataset.form](Object.fromEntries(new FormData(f)), f)
+})
+document.addEventListener('change', e => {
+  const t = e.target
+  if (t.matches('[data-vercomo]')) { if (t.value) entrarComo(t.value); return }
+  if (t.matches('[data-filtro]')) { UI.filtro[t.dataset.filtro] = t.type === 'checkbox' ? t.checked : t.value; return render() }
+  if (t.matches('[data-periodo]')) { if (t.value !== 'otro') UI[t.dataset.periodo] = periodoDe(t.value); else UI[t.dataset.periodo].clave = 'otro'; return render() }
+  if (t.matches('[data-periodo-campo]')) { const p = UI[t.dataset.periodoCampo]; p[t.dataset.campo] = t.value; p.clave = 'otro'; return render() }
+  if (t.matches('[data-rol]')) {
+    const u = S.usuarios.find(x => x.id === t.dataset.rol)
+    if (!confirm(`¿Cambiar el rol de ${u.nombre} a ${ROL[t.value]}?`)) return render()
+    auditar(`Cambió el rol de ${u.nombre} de ${ROL[u.rol]} a ${ROL[t.value]}`); u.rol = t.value; decir('Rol actualizado.'); persistir(); render()
+  }
+})
+document.addEventListener('input', e => {
+  if (e.target.closest('#calc')) calc()
+  if (e.target.matches('[data-buscar]')) { UI.buscar = e.target.value; const pos = e.target.selectionStart; render(); const i = $('[data-buscar]'); i.focus(); i.setSelectionRange(pos, pos) }
+})
+render()
+</script>
+</body>
+</html>
